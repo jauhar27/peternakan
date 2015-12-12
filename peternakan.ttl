@@ -10,9 +10,9 @@
 @prefix org:      <http://www.w3.org/ns/org#> .
 
 @prefix qb:       <http://purl.org/linked-data/cube#> .
-@prefix qb4o: 	  <http://purl.org/olap#> .
+@prefix qb4o:     <http://purl.org/olap#> .
 
-@prefix sdmx:    	 <http://purl.org/linked-data/sdmx#> .
+@prefix sdmx:        <http://purl.org/linked-data/sdmx#> .
 @prefix sdmx-concept:    <http://purl.org/linked-data/sdmx/2009/concept#> .
 @prefix sdmx-dimension:  <http://purl.org/linked-data/sdmx/2009/dimension#> .
 @prefix sdmx-attribute:  <http://purl.org/linked-data/sdmx/2009/attribute#> .
@@ -21,11 +21,11 @@
 @prefix sdmx-code:       <http://purl.org/linked-data/sdmx/2009/code#> .
 @prefix sdmx-subject:    <http://purl.org/linked-data/sdmx/2009/subject#> .
 
-@prefix :       	<url ttl> .
+@prefix :           <https://raw.githubusercontent.com/jauhar27/peternakan/master/peternakan.ttl> .
 
 # -- Data Set --------------------------------------------
 
-:ds a qb:DataSet ;
+:ds a qb:DataSet;
     dc:publisher "Badan Pusat Statistik"^^xsd:String;
     dct:subject sdmx-subject:2.4.1;
     qb:structure :dsd;
@@ -37,12 +37,12 @@
         <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/131>,
         <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/217>,
         <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/218>.
-	
+    
 # -- Data structure definition ----------------------------
 
 :dsd a qb:DataStructureDefinition ;
     rdfs:label "Star Schema Data Structure Definition"@en ;
-	qb:component 
+    qb:component 
         [ qb:dimension :DimKabupaten ],
         [ qb:dimension :DimDaerahBagian ],
         [ qb:dimension :DimKecamatan ],
@@ -51,7 +51,7 @@
         [ qb:dimension sdmx−dimension:sex ];
     qb:component 
         [ qb:measure :qtyHewan; qb4o:hasAggregateFunction qb4o:sum ];
-	.
+    .
 
 # -- Dimensions and measures  -----------------------------
 
@@ -68,7 +68,7 @@
     rdfs:range skos:Concept ;
     qb:codeList :CodeListKecamatan.
 :DimJenisHewan a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Jenis Hewan"@id ;
+    rdfs:label "Jenis Hewan"@id;
     rdfs:range skos:Concept ;
     qb:codeList :CodeListJenisHewan.
 :DimNamaHewan a rdf:Property, qb:DimensionProperty;
