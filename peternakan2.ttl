@@ -20,7 +20,7 @@
 @prefix sdmx-code:       <http://purl.org/linked-data/sdmx/2009/code#> .
 @prefix sdmx-subject:    <http://purl.org/linked-data/sdmx/2009/subject#> .
 
-@prefix :           <https://raw.githubusercontent.com/jauhar27/peternakan/master/peternakan.ttl#> .
+@prefix :           <https://raw.githubusercontent.com/jauhar27/peternakan/master/peternakan2.ttl#> .
 
 # -- Data Set --------------------------------------------
 
