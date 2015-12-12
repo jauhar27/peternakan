@@ -1,0 +1,1909 @@
+
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix void:     <http://rdfs.org/ns/void#> .
+@prefix dct:      <http://purl.org/dc/terms/> .
+@prefix foaf:     <http://xmlns.com/foaf/0.1/> .
+@prefix org:      <http://www.w3.org/ns/org#> .
+
+@prefix qb:       <http://purl.org/linked-data/cube#> .
+@prefix qb4o: 	  <http://purl.org/olap#> .
+
+@prefix sdmx:    	 <http://purl.org/linked-data/sdmx#> .
+@prefix sdmx-concept:    <http://purl.org/linked-data/sdmx/2009/concept#> .
+@prefix sdmx-dimension:  <http://purl.org/linked-data/sdmx/2009/dimension#> .
+@prefix sdmx-attribute:  <http://purl.org/linked-data/sdmx/2009/attribute#> .
+@prefix sdmx-measure:    <http://purl.org/linked-data/sdmx/2009/measure#> .
+@prefix sdmx-metadata:   <http://purl.org/linked-data/sdmx/2009/metadata#> .
+@prefix sdmx-code:       <http://purl.org/linked-data/sdmx/2009/code#> .
+@prefix sdmx-subject:    <http://purl.org/linked-data/sdmx/2009/subject#> .
+
+@prefix :       	<url ttl> .
+
+# -- Data Set --------------------------------------------
+
+:ds a qb:DataSet ;
+    dc:publisher "Badan Pusat Statistik"^^xsd:String;
+    dct:subject sdmx-subject:2.4.1;
+    qb:structure :dsd;
+    rdfs:label "Data Peternakan SBY 2013"^^xsd:String;
+    rdfs:comment "Sumber http://surabayakota.bps.go.id/";
+    rdfs:seeAlso 
+        <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/209>,
+        <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/138>,
+        <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/131>,
+        <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/217>,
+        <http://surabayakota.bps.go.id/webbeta/frontend/linkTabelStatis/view/id/218>.
+	
+# -- Data structure definition ----------------------------
+
+:dsd a qb:DataStructureDefinition ;
+    rdfs:label "Star Schema Data Structure Definition"@en ;
+	qb:component 
+        [ qb:dimension :DimKabupaten ],
+        [ qb:dimension :DimDaerahBagian ],
+        [ qb:dimension :DimKecamatan ],
+        [ qb:dimension :DimJenisHewan ],
+        [ qb:dimension :DimNamaHewan ],
+        [ qb:dimension sdmx−dimension:sex ];
+    qb:component 
+        [ qb:measure :qtyHewan; qb4o:hasAggregateFunction qb4o:sum ];
+	.
+
+# -- Dimensions and measures  -----------------------------
+
+:DimKabupaten a rdf:Property, qb:DimensionProperty;
+    rdfs:label "Kabupaten"@id ;
+    rdfs:range skos:Concept ;
+    qb:codeList :CodeListKabupaten.
+:DimDaerahBagian a rdf:Property, qb:DimensionProperty;
+    rdfs:label "Daerah Bagian"@id ;
+    rdfs:range skos:Concept ;
+    qb:codeList :CodeListDaerahBagian.
+:DimKecamatan a rdf:Property, qb:DimensionProperty;
+    rdfs:label "Kecamatan"@id ;
+    rdfs:range skos:Concept ;
+    qb:codeList :CodeListKecamatan.
+:DimJenisHewan a rdf:Property, qb:DimensionProperty;
+    rdfs:label "Jenis Hewan"@id ;
+    rdfs:range skos:Concept ;
+    qb:codeList :CodeListJenisHewan.
+:DimNamaHewan a rdf:Property, qb:DimensionProperty;
+    rdfs:label "Nama Hewan"@id ;
+    rdfs:range skos:Concept ;
+    qb:codeList :CodeListNamaHewan.
+:qtyHewan  a rdf:Property, qb:MeasureProperty;
+    rdfs:label "quantity"@en ;
+    rdfs:subPropertyOf sdmx-measure:obsValue;
+    rdfs:range xsd:decimal.
+
+# -- Code lists -------------------------------------------
+:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
+    rdfs:label "Kecamatan"@id; 
+    skos:notation "Kec";
+    skos:hasTopConcept :Kab_Surabaya.
+:CodeListDaerahBagian a skos:ConceptScheme, sdmx:CodeList;
+    rdfs:label "Daerah Bagian"@id; 
+    skos:notation "DB";
+    skos:hasTopConcept 
+        :Surabaya_Utara,
+        :Surabaya_Timur,
+        :Surabaya_Selatan,
+        :Surabaya_Barat,
+        :Surabaya_Pusat.
+:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
+    rdfs:label "Kecamatan"@id;  
+    skos:notation "Kec";
+    skos:hasTopConcept
+        :Kec_Karangpilang,
+        :Kec_Jambangan,
+        :Kec_Gayungan,
+        :Kec_Wonocolo,
+        :Kec_Tenggilis_Mejoyo,
+        :Kec_Gunung_Anyar,
+        :Kec_Rungkut,
+        :Kec_Sukoklilo,
+        :Kec_Mulyorejo,
+        :Kec_Gubeng,
+        :Kec_Wonokromo,
+        :Kec_Dukuh_Pakis,
+        :Kec_Wiyung,
+        :Kec_LakarSantri,
+        :Kec_Sambikerep,
+        :Kec_Tandes,
+        :Kec_Sukomanunggal,
+        :Kec_Sawahan,
+        :Kec_Tegalsari,
+        :Kec_Genteng,
+        :Kec_Tambaksari,
+        :Kec_Kenjeran,
+        :Kec_Bulak,
+        :Kec_Simokerto,
+        :Kec_Semampir,
+        :Kec_Pabean_Cantikan,
+        :Kec_Bubutan,
+        :Kec_Krembangan,
+        :Kec_Asemrowo,
+        :Kec_Benowo,
+        :Kec_Pakal.
+:CodeListJenisHewan a skos:ConceptScheme, sdmx:CodeList;
+    rdfs:label "Jenis Hewan";
+    skos:notation "JH";
+    skos:hasTopConcept
+        :Memamahbiak.
+:CodeListNamaHewan a skos:ConceptScheme, sdmx:CodeList;
+    rdfs:label "Nama Hewan";
+    skos:notation "NH";
+    skos:hasTopConcept
+        :Sapi_Potong,
+        :Sapi_Perah,
+        :Kerbau.
+
+# -- Concepts -----------------------------------------
+
+:Kab_Surabaya a skos:Concept;
+    skos:inScheme :CodeListKabupaten.
+
+:Surabaya_Utara a skos:Concept;
+    skos:inScheme :CodeListDaerahBagian.
+:Surabaya_Timur a skos:Concept;
+    skos:inScheme :CodeListDaerahBagian.
+:Surabaya_Selatan a skos:Concept;
+    skos:inScheme :CodeListDaerahBagian.
+:Surabaya_Barat a skos:Concept;
+    skos:inScheme :CodeListDaerahBagian.
+:Surabaya_Pusat a skos:Concept;
+    skos:inScheme :CodeListDaerahBagian.
+
+:Kec_Karangpilang a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Jambangan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Gayungan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Wonocolo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Tenggilis_Mejoyo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Gunung_Anyar a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Rungkut a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Sukoklilo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Mulyorejo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Gubeng a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Wonokromo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Dukuh_Pakis a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Wiyung a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_LakarSantri a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Sambikerep a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Tandes a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Sukomanunggal a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Sawahan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Tegalsari a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Genteng a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Tambaksari a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Kenjeran a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Bulak a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Simokerto a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Semampir a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Pabean_Cantikan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Bubutan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Krembangan a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Asemrowo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Benowo a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+:Kec_Pakal a skos:Concept;
+    skos:inScheme :CodeListKecamatan.
+
+:Memamahbiak a skos:Concept;
+    skos:inScheme :CodeListJenisHewan.
+
+:Sapi_Potong a skos:Concept;
+    skos:inScheme :CodeListNamaHewan.
+:Sapi_Perah a skos:Concept;
+    skos:inScheme :CodeListNamaHewan.
+:Kerbau a skos:Concept;
+    skos:inScheme :CodeListNamaHewan.
+
+# -- Observations -----------------------------------------
+
+:data1 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data2 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data3 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data4 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data5 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data6 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Asemrowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data7 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 19.
+:data8 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data9 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data10 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data11 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 2.
+:data12 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Benowo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data13 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data14 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data15 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data16 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data17 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data18 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Bubutan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data19 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 17.
+:data20 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data21 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data22 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 8.
+:data23 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data24 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Bulak;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data25 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 3.
+:data26 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 8.
+:data27 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data28 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data29 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data30 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Dukuh_Pakis;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data31 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 6.
+:data32 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data33 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data34 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data35 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data36 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Gayungan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data37 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 11.
+:data38 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 3.
+:data39 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data40 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data41 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data42 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Genteng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data43 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 5.
+:data44 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data45 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 45.
+:data46 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 71.
+:data47 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data48 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Gubeng;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data49 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data50 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data51 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data52 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 6.
+:data53 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data54 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Tumur;
+    DimKecamatan :Kec_Gunung_Anyar;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data55 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 8.
+:data56 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 2.
+:data57 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data58 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data59 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data60 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Jambangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data61 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 46.
+:data62 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 16.
+:data63 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data64 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 20.
+:data65 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 3.
+:data66 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Karangpilang;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 16.
+:data67 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 118.
+:data68 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 12.
+:data69 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 6.
+:data70 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 39.
+:data71 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data72 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Kenjeran;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data73 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data74 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data75 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data76 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data77 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data78 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Krembangan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data79 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 24.
+:data80 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 18.
+:data81 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 12.
+:data82 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 13.
+:data83 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 6.
+:data84 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Lakarsantri;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data85 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 139.
+:data86 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 44.
+:data87 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 2.
+:data88 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 6.
+:data89 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data90 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Mulyorejo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data91 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 190.
+:data92 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data93 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data94 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data95 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data96 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Pabean_Cantikan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data97 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 162.
+:data98 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 48.
+:data99 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 5.
+:data100 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 57.
+:data101 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data102 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Pakal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data103 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data104 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data105 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data106 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data107 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data108 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Rungkut;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 3.
+:data109 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 82.
+:data110 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 12.
+:data111 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 1.
+:data112 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 7.
+:data113 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data114 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sambikerep;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data115 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data116 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data117 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data118 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data119 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data120 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Sawahan;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data121 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data122 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data123 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 7.
+:data124 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 20.
+:data125 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data126 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Utara;
+    DimKecamatan :Kec_Semampir;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data127 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data128 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data129 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data130 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data131 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data132 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Simokerto;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data133 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 9.
+:data134 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data135 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data136 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data137 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data138 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Sukoklilo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data139 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data140 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data141 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data142 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data143 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data144 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Sukomanunggal;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data145 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 1.
+:data146 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data147 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data148 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data149 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data150 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tambaksari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data151 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 25.
+:data152 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 31.
+:data153 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data154 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data155 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data156 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Barat;
+    DimKecamatan :Kec_Tandes;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data157 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data158 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data159 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data160 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data161 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data162 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Pusat;
+    DimKecamatan :Kec_Tegalsari;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data163 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 7.
+:data164 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data165 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data166 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data167 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data168 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Timur;
+    DimKecamatan :Kec_Tenggilis_Mejoyo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data169 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 23.
+:data170 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 13.
+:data171 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data172 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 26.
+:data173 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data174 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wiyung;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data175 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data176 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data177 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 41.
+:data178 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 225.
+:data179 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data180 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonocolo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 1.
+:data181 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data182 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Potong;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data183 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data184 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Sapi_Perah;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
+:data185 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−M;
+    qtyHewan 0.
+:data186 a :peternakan, qb:Observation;
+    qb:dataSet :ds;
+    DimKabupaten :Kab_Surabaya;
+    DimDaerahBagian :Surabaya_Selatan;
+    DimKecamatan :Kec_Wonokromo;
+    DimJenisHewan :Memamahbiak;
+    DimNamaHewan :Kerbau;
+    sdmx−dimension:sex sdmx−code:sex−F;
+    qtyHewan 0.
