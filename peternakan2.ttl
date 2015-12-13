@@ -40,7 +40,7 @@
         [ qb:dimension :DimNamaHewan ],
         [ qb:dimension sdmx-dimension:sex ];
     qb:component 
-        [ qb:measure :qtyHewan; qb4o:hasAggregateFunction qb4o:sum ];
+        [ qb:measure :qtyHewan ];
     .
 
 # -- Dimensions and measures  -----------------------------
