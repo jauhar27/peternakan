@@ -14,245 +14,257 @@
 
 @prefix sdmx:        <http://purl.org/linked-data/sdmx#> .
 @prefix sdmx-concept:    <http://purl.org/linked-data/sdmx/2009/concept#> .
+@prefix sdmx-dimension:  <http://purl.org/linked-data/sdmx/2009/dimension#> .
 @prefix sdmx-attribute:  <http://purl.org/linked-data/sdmx/2009/attribute#> .
 @prefix sdmx-measure:    <http://purl.org/linked-data/sdmx/2009/measure#> .
 @prefix sdmx-metadata:   <http://purl.org/linked-data/sdmx/2009/metadata#> .
 @prefix sdmx-code:       <http://purl.org/linked-data/sdmx/2009/code#> .
 @prefix sdmx-subject:    <http://purl.org/linked-data/sdmx/2009/subject#> .
 
-@prefix :           <https://raw.githubusercontent.com/jauhar27/peternakan/master/peternakan.ttl#> .
+@prefix ex:           <https://raw.githubusercontent.com/jauhar27/peternakan/master/peternakan.ttl> .
 
 # -- Data Set --------------------------------------------
 
-:ds a qb:DataSet;
-    qb:structure :dsd;
+ex:ds a qb:DataSet;
+    qb:structure ex:dsd;
     rdfs:label "Data Peternakan SBY 2013"^^xsd:String.
 # -- Data structure definition ----------------------------
 
-:dsd a qb:DataStructureDefinition ;
+ex:dsd a qb:DataStructureDefinition ;
     rdfs:label "Star Schema Data Structure Definition"@en ;
     qb:component 
-        [ qb:dimension :DimKabupaten ],
-        [ qb:dimension :DimDaerahBagian ],
-        [ qb:dimension :DimKecamatan ],
-        [ qb:dimension :DimJenisHewan ],
-        [ qb:dimension :DimNamaHewan ];
+        [ qb:dimension ex:DimKabupaten ],
+        [ qb:dimension ex:DimDaerahBagian ],
+        [ qb:dimension ex:DimKecamatan ],
+        [ qb:dimension ex:DimJenisHewan ],
+        [ qb:dimension ex:DimNamaHewan ],
+        [ qb:dimension sdmx-dimension:sex ];
     qb:component 
-        [ qb:measure :qtyHewan ];
+        [ qb:measure ex:qtyHewan; qb4o:hasAggregateFunction qb4o:sum ];
     .
 
 # -- Dimensions and measures  -----------------------------
 
-:DimKabupaten a rdf:Property, qb:DimensionProperty;
+ex:DimKabupaten a rdf:Property, qb:DimensionProperty;
     rdfs:label "Kabupaten"@id ;
     rdfs:range skos:Concept ;
-    qb:codeList :CodeListKabupaten.
-:DimDaerahBagian a rdf:Property, qb:DimensionProperty;
+    qb:codeList ex:CodeListKabupaten.
+ex:DimDaerahBagian a rdf:Property, qb:DimensionProperty;
     rdfs:label "Daerah Bagian"@id ;
     rdfs:range skos:Concept ;
-    qb:codeList :CodeListDaerahBagian.
-:DimKecamatan a rdf:Property, qb:DimensionProperty;
+    qb:codeList ex:CodeListDaerahBagian.
+ex:DimKecamatan a rdf:Property, qb:DimensionProperty;
     rdfs:label "Kecamatan"@id ;
     rdfs:range skos:Concept ;
-    qb:codeList :CodeListKecamatan.
-:DimJenisHewan a rdf:Property, qb:DimensionProperty;
+    qb:codeList ex:CodeListKecamatan.
+ex:DimJenisHewan a rdf:Property, qb:DimensionProperty;
     rdfs:label "Jenis Hewan"@id;
     rdfs:range skos:Concept ;
-    qb:codeList :CodeListJenisHewan.
-:DimNamaHewan a rdf:Property, qb:DimensionProperty;
+    qb:codeList ex:CodeListJenisHewan.
+ex:DimNamaHewan a rdf:Property, qb:DimensionProperty;
     rdfs:label "Nama Hewan"@id ;
     rdfs:range skos:Concept ;
-    qb:codeList :CodeListNamaHewan.
-:qtyHewan  a rdf:Property, qb:MeasureProperty;
+    qb:codeList ex:CodeListNamaHewan.
+ex:qtyHewan  a rdf:Property, qb:MeasureProperty;
     rdfs:label "quantity"@en ;
     rdfs:subPropertyOf sdmx-measure:obsValue;
     rdfs:range xsd:decimal.
 
 # -- Code lists -------------------------------------------
-:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
+ex:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
     rdfs:label "Kecamatan"@id; 
-    skos:hasTopConcept :Kab_Surabaya.
-:CodeListDaerahBagian a skos:ConceptScheme, sdmx:CodeList;
+    skos:notation "Kec";
+    skos:hasTopConcept ex:Kab_Surabaya.
+ex:CodeListDaerahBagian a skos:ConceptScheme, sdmx:CodeList;
     rdfs:label "Daerah Bagian"@id; 
+    skos:notation "DB";
     skos:hasTopConcept 
-        :Surabaya_Utara,
-        :Surabaya_Timur,
-        :Surabaya_Selatan,
-        :Surabaya_Barat,
-        :Surabaya_Pusat.
-:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
+        ex:Surabaya_Utara,
+        ex:Surabaya_Timur,
+        ex:Surabaya_Selatan,
+        ex:Surabaya_Barat,
+        ex:Surabaya_Pusat.
+ex:CodeListKecamatan a skos:ConceptScheme, sdmx:CodeList;
     rdfs:label "Kecamatan"@id;  
+    skos:notation "Kec";
     skos:hasTopConcept
-        :Kec_Karangpilang,
-        :Kec_Jambangan,
-        :Kec_Gayungan,
-        :Kec_Wonocolo,
-        :Kec_Tenggilis_Mejoyo,
-        :Kec_Gunung_Anyar,
-        :Kec_Rungkut,
-        :Kec_Sukoklilo,
-        :Kec_Mulyorejo,
-        :Kec_Gubeng,
-        :Kec_Wonokromo,
-        :Kec_Dukuh_Pakis,
-        :Kec_Wiyung,
-        :Kec_LakarSantri,
-        :Kec_Sambikerep,
-        :Kec_Tandes,
-        :Kec_Sukomanunggal,
-        :Kec_Sawahan,
-        :Kec_Tegalsari,
-        :Kec_Genteng,
-        :Kec_Tambaksari,
-        :Kec_Kenjeran,
-        :Kec_Bulak,
-        :Kec_Simokerto,
-        :Kec_Semampir,
-        :Kec_Pabean_Cantikan,
-        :Kec_Bubutan,
-        :Kec_Krembangan,
-        :Kec_Asemrowo,
-        :Kec_Benowo,
-        :Kec_Pakal.
-:CodeListJenisHewan a skos:ConceptScheme, sdmx:CodeList;
+        ex:Kec_Karangpilang,
+        ex:Kec_Jambangan,
+        ex:Kec_Gayungan,
+        ex:Kec_Wonocolo,
+        ex:Kec_Tenggilis_Mejoyo,
+        ex:Kec_Gunung_Anyar,
+        ex:Kec_Rungkut,
+        ex:Kec_Sukoklilo,
+        ex:Kec_Mulyorejo,
+        ex:Kec_Gubeng,
+        ex:Kec_Wonokromo,
+        ex:Kec_Dukuh_Pakis,
+        ex:Kec_Wiyung,
+        ex:Kec_LakarSantri,
+        ex:Kec_Sambikerep,
+        ex:Kec_Tandes,
+        ex:Kec_Sukomanunggal,
+        ex:Kec_Sawahan,
+        ex:Kec_Tegalsari,
+        ex:Kec_Genteng,
+        ex:Kec_Tambaksari,
+        ex:Kec_Kenjeran,
+        ex:Kec_Bulak,
+        ex:Kec_Simokerto,
+        ex:Kec_Semampir,
+        ex:Kec_Pabean_Cantikan,
+        ex:Kec_Bubutan,
+        ex:Kec_Krembangan,
+        ex:Kec_Asemrowo,
+        ex:Kec_Benowo,
+        ex:Kec_Pakal.
+ex:CodeListJenisHewan a skos:ConceptScheme, sdmx:CodeList;
     rdfs:label "Jenis Hewan";
+    skos:notation "JH";
     skos:hasTopConcept
-        :Memamahbiak.
-:CodeListNamaHewan a skos:ConceptScheme, sdmx:CodeList;
+        ex:Memamahbiak.
+ex:CodeListNamaHewan a skos:ConceptScheme, sdmx:CodeList;
     rdfs:label "Nama Hewan";
+    skos:notation "NH";
     skos:hasTopConcept
-        :Sapi_Potong,
-        :Sapi_Perah,
-        :Kerbau.
+        ex:Sapi_Potong,
+        ex:Sapi_Perah,
+        ex:Kerbau.
 
 # -- Concepts -----------------------------------------
 
-:Kab_Surabaya a skos:Concept;
-    skos:inScheme :CodeListKabupaten.
+ex:Kab_Surabaya a skos:Concept;
+    skos:inScheme ex:CodeListKabupaten.
 
-:Surabaya_Utara a skos:Concept;
-    skos:inScheme :CodeListDaerahBagian.
-:Surabaya_Timur a skos:Concept;
-    skos:inScheme :CodeListDaerahBagian.
-:Surabaya_Selatan a skos:Concept;
-    skos:inScheme :CodeListDaerahBagian.
-:Surabaya_Barat a skos:Concept;
-    skos:inScheme :CodeListDaerahBagian.
-:Surabaya_Pusat a skos:Concept;
-    skos:inScheme :CodeListDaerahBagian.
+ex:Surabaya_Utara a skos:Concept;
+    skos:inScheme ex:CodeListDaerahBagian.
+ex:Surabaya_Timur a skos:Concept;
+    skos:inScheme ex:CodeListDaerahBagian.
+ex:Surabaya_Selatan a skos:Concept;
+    skos:inScheme ex:CodeListDaerahBagian.
+ex:Surabaya_Barat a skos:Concept;
+    skos:inScheme ex:CodeListDaerahBagian.
+ex:Surabaya_Pusat a skos:Concept;
+    skos:inScheme ex:CodeListDaerahBagian.
 
-:Kec_Karangpilang a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Jambangan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Gayungan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Wonocolo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Tenggilis_Mejoyo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Gunung_Anyar a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Rungkut a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Sukoklilo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Mulyorejo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Gubeng a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Wonokromo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Dukuh_Pakis a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Wiyung a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_LakarSantri a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Sambikerep a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Tandes a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Sukomanunggal a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Sawahan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Tegalsari a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Genteng a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Tambaksari a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Kenjeran a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Bulak a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Simokerto a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Semampir a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Pabean_Cantikan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Bubutan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Krembangan a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Asemrowo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Benowo a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
-:Kec_Pakal a skos:Concept;
-    skos:inScheme :CodeListKecamatan.
+ex:Kec_Karangpilang a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Jambangan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Gayungan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Wonocolo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Tenggilis_Mejoyo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Gunung_Anyar a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Rungkut a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Sukoklilo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Mulyorejo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Gubeng a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Wonokromo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Dukuh_Pakis a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Wiyung a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_LakarSantri a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Sambikerep a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Tandes a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Sukomanunggal a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Sawahan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Tegalsari a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Genteng a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Tambaksari a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Kenjeran a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Bulak a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Simokerto a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Semampir a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Pabean_Cantikan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Bubutan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Krembangan a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Asemrowo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Benowo a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
+ex:Kec_Pakal a skos:Concept;
+    skos:inScheme ex:CodeListKecamatan.
 
-:Memamahbiak a skos:Concept;
-    skos:inScheme :CodeListJenisHewan.
+ex:Memamahbiak a skos:Concept;
+    skos:inScheme ex:CodeListJenisHewan.
 
-:Sapi_Potong a skos:Concept;
-    skos:inScheme :CodeListNamaHewan.
-:Sapi_Perah a skos:Concept;
-    skos:inScheme :CodeListNamaHewan.
-:Kerbau a skos:Concept;
-    skos:inScheme :CodeListNamaHewan.
+ex:Sapi_Potong a skos:Concept;
+    skos:inScheme ex:CodeListNamaHewan.
+ex:Sapi_Perah a skos:Concept;
+    skos:inScheme ex:CodeListNamaHewan.
+ex:Kerbau a skos:Concept;
+    skos:inScheme ex:CodeListNamaHewan.
 
 # -- Observations -----------------------------------------
 
-:data1 a :peternakan, qb:Observation;
-    qb:dataSet :ds;
-    DimKabupaten :Kab_Surabaya;
-    DimDaerahBagian :Surabaya_Barat;
-    DimKecamatan :Kec_Asemrowo;
-    DimJenisHewan :Memamahbiak;
-    DimNamaHewan :Sapi_Potong;
-    qtyHewan 0.
-:data2 a :peternakan, qb:Observation;
-    qb:dataSet :ds;
-    DimKabupaten :Kab_Surabaya;
-    DimDaerahBagian :Surabaya_Barat;
-    DimKecamatan :Kec_Asemrowo;
-    DimJenisHewan :Memamahbiak;
-    DimNamaHewan :Sapi_Potong;
-    qtyHewan 0.
-:data3 a :peternakan, qb:Observation;
-    qb:dataSet :ds;
-    DimKabupaten :Kab_Surabaya;
-    DimDaerahBagian :Surabaya_Barat;
-    DimKecamatan :Kec_Asemrowo;
-    DimJenisHewan :Memamahbiak;
-    DimNamaHewan :Sapi_Perah;
-    qtyHewan 0.
-:data4 a :peternakan, qb:Observation;
-    qb:dataSet :ds;
-    DimKabupaten :Kab_Surabaya;
-    DimDaerahBagian :Surabaya_Barat;
-    DimKecamatan :Kec_Asemrowo;
-    DimJenisHewan :Memamahbiak;
-    DimNamaHewan :Sapi_Perah;
-    qtyHewan 0.
-:data5 a :peternakan, qb:Observation;
-    qb:dataSet :ds;
-    DimKabupaten :Kab_Surabaya;
-    DimDaerahBagian :Surabaya_Barat;
-    DimKecamatan :Kec_Asemrowo;
-    DimJenisHewan :Memamahbiak;
-    DimNamaHewan :Kerbau;
-    qtyHewan 0.
+ex:data1 a ex:peternakan, qb:Observation;
+    qb:dataSet ex:ds;
+    ex:DimKabupaten ex:Kab_Surabaya;
+    ex:DimDaerahBagian ex:Surabaya_Barat;
+    ex:DimKecamatan ex:Kec_Asemrowo;
+    ex:DimJenisHewan ex:Memamahbiak;
+    ex:DimNamaHewan ex:Sapi_Potong;
+    sdmx-dimension:sex sdmx-code:sex-M;
+    ex:qtyHewan 0.
+ex:data2 a ex:peternakan, qb:Observation;
+    qb:dataSet ex:ds;
+    ex:DimKabupaten ex:Kab_Surabaya;
+    ex:DimDaerahBagian ex:Surabaya_Barat;
+    ex:DimKecamatan ex:Kec_Asemrowo;
+    ex:DimJenisHewan ex:Memamahbiak;
+    ex:DimNamaHewan ex:Sapi_Potong;
+    sdmx-dimension:sex sdmx-code:sex-F;
+    ex:qtyHewan 0.
+ex:data3 a ex:peternakan, qb:Observation;
+    qb:dataSet ex:ds;
+    ex:DimKabupaten ex:Kab_Surabaya;
+    ex:DimDaerahBagian ex:Surabaya_Barat;
+    ex:DimKecamatan ex:Kec_Asemrowo;
+    ex:DimJenisHewan ex:Memamahbiak;
+    ex:DimNamaHewan ex:Sapi_Perah;
+    sdmx-dimension:sex sdmx-code:sex-M;
+    ex:qtyHewan 0.
+ex:data4 a ex:peternakan, qb:Observation;
+    qb:dataSet ex:ds;
+    ex:DimKabupaten ex:Kab_Surabaya;
+    ex:DimDaerahBagian ex:Surabaya_Barat;
+    ex:DimKecamatan ex:Kec_Asemrowo;
+    ex:DimJenisHewan ex:Memamahbiak;
+    ex:DimNamaHewan ex:Sapi_Perah;
+    sdmx-dimension:sex sdmx-code:sex-F;
+    ex:qtyHewan 0.
+ex:data5 a ex:peternakan, qb:Observation;
+    qb:dataSet ex:ds;
+    ex:DimKabupaten ex:Kab_Surabaya;
+    ex:DimDaerahBagian ex:Surabaya_Barat;
+    ex:DimKecamatan ex:Kec_Asemrowo;
+    ex:DimJenisHewan ex:Memamahbiak;
+    ex:DimNamaHewan ex:Kerbau;
+    sdmx-dimension:sex sdmx-code:sex-M;
+    ex:qtyHewan 0.
