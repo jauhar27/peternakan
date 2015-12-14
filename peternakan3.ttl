@@ -47,11 +47,7 @@ ex:ds a qb:DataSet;
 
 ex:dsd a qb:DataStructureDefinition ;
     qb:component 
-        [ qb:dimension ex:DimKabupaten ],
-        [ qb:dimension ex:DimDaerahBagian ],
-        [ qb:dimension ex:DimKecamatan ],
-        [ qb:dimension ex:DimJenisHewan ],
-        [ qb:dimension ex:DimNamaHewan ],
+        [ qb:dimension sdmx-dimension:refArea ],
         [ qb:dimension sdmx-dimension:sex ];
     qb:component 
         [ qb:measure ex:qtyHewan ];
@@ -59,105 +55,46 @@ ex:dsd a qb:DataStructureDefinition ;
 
 # -- Dimensions and measures  -----------------------------
 
-ex:DimKabupaten a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Kabupaten"@id ;
-    rdfs:subPropertyOf sdmx-dimension:refArea ;
-    rdfs:range dpbedia-id-ont:District ;
-    qb:concept sdmx-concept:refArea .
-ex:DimDaerahBagian a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Daerah Bagian"@id ;
-    rdfs:subPropertyOf sdmx-dimension:refArea ;
-    rdfs:range dpbedia-id-ont:District ;
-    qb:concept sdmx-concept:refArea .
-ex:DimKecamatan a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Kecamatan"@id ;
-    rdfs:subPropertyOf sdmx-dimension:refArea ;
-    rdfs:range dpbedia-id-ont:District ;
-    qb:concept sdmx-concept:refArea .
-ex:DimJenisHewan a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Jenis Hewan"@id;
-    rdfs:range skos:concept ;
-    qb:codeList ex:CodeListJenisHewan.
-ex:DimNamaHewan a rdf:Property, qb:DimensionProperty;
-    rdfs:label "Nama Hewan"@id ;
-    rdfs:range skos:concept ;
-    qb:codeList ex:CodeListNamaHewan.
+
 ex:qtyHewan  a rdf:Property, qb:MeasureProperty;
     rdfs:label "quantity"@en ;
     rdfs:subPropertyOf sdmx-measure:obsValue;
     rdfs:range xsd:decimal.
 
-# -- Code lists -------------------------------------------
-
-ex:CodeListJenisHewan a skos:ConceptScheme, sdmx:CodeList;
-    rdfs:label "Jenis Hewan";
-    skos:notation "JH";
-    skos:hasTopConcept
-        ex:Memamahbiak.
-ex:CodeListNamaHewan a skos:ConceptScheme, sdmx:CodeList;
-    rdfs:label "Nama Hewan";
-    skos:notation "NH";
-    skos:hasTopConcept
-        ex:Sapi_Potong,
-        ex:Sapi_Perah,
-        ex:Kerbau.
-
-# -- Concepts -----------------------------------------
-
-ex:Memamahbiak a skos:Concept;
-    skos:inScheme ex:CodeListJenisHewan.
-
-ex:Sapi_Potong a skos:Concept;
-    skos:inScheme ex:CodeListNamaHewan.
-ex:Sapi_Perah a skos:Concept;
-    skos:inScheme ex:CodeListNamaHewan.
-ex:Kerbau a skos:Concept;
-    skos:inScheme ex:CodeListNamaHewan.
-
 # -- Observations -----------------------------------------
 
 ex:data1 a ex:peternakan, qb:Observation;
 	qb:dataSet ex:ds;
-	ex:DimKabupaten ex:Kab_Surabaya;
-	ex:DimDaerahBagian ex:Surabaya_Barat;
-	ex:DimKecamatan ex:Kec_Asemrowo;
-	ex:DimJenisHewan ex:Memamahbiak;
-	ex:DimNamaHewan ex:Sapi_Potong;
+	sdmx-dimension:refArea ex:Kab_Surabaya;
+	sdmx-dimension:refArea ex:Surabaya_Barat;
+	sdmx-dimension:refArea ex:Kec_Asemrowo;
 	sdmx-dimension:sex sdmx-code:sex-M;
 	ex:qtyHewan 0.
 ex:data2 a ex:peternakan, qb:Observation;
 	qb:dataSet ex:ds;
-	ex:DimKabupaten ex:Kab_Surabaya;
-	ex:DimDaerahBagian ex:Surabaya_Barat;
-	ex:DimKecamatan ex:Kec_Asemrowo;
-	ex:DimJenisHewan ex:Memamahbiak;
-	ex:DimNamaHewan ex:Sapi_Potong;
+	sdmx-dimension:refArea ex:Kab_Surabaya;
+	sdmx-dimension:refArea ex:Surabaya_Barat;
+	sdmx-dimension:refArea ex:Kec_Asemrowo;
 	sdmx-dimension:sex sdmx-code:sex-F;
 	ex:qtyHewan 0.
 ex:data3 a ex:peternakan, qb:Observation;
 	qb:dataSet ex:ds;
-	ex:DimKabupaten ex:Kab_Surabaya;
-	ex:DimDaerahBagian ex:Surabaya_Barat;
-	ex:DimKecamatan ex:Kec_Asemrowo;
-	ex:DimJenisHewan ex:Memamahbiak;
-	ex:DimNamaHewan ex:Sapi_Perah;
+	sdmx-dimension:refArea ex:Kab_Surabaya;
+	sdmx-dimension:refArea ex:Surabaya_Barat;
+	sdmx-dimension:refArea ex:Kec_Asemrowo;
 	sdmx-dimension:sex sdmx-code:sex-M;
 	ex:qtyHewan 0.
 ex:data4 a ex:peternakan, qb:Observation;
 	qb:dataSet ex:ds;
-	ex:DimKabupaten ex:Kab_Surabaya;
-	ex:DimDaerahBagian ex:Surabaya_Barat;
-	ex:DimKecamatan ex:Kec_Asemrowo;
-	ex:DimJenisHewan ex:Memamahbiak;
-	ex:DimNamaHewan ex:Sapi_Perah;
+	sdmx-dimension:refArea ex:Kab_Surabaya;
+	sdmx-dimension:refArea ex:Surabaya_Barat;
+	sdmx-dimension:refArea ex:Kec_Asemrowo;
 	sdmx-dimension:sex sdmx-code:sex-F;
 	ex:qtyHewan 0.
 ex:data5 a ex:peternakan, qb:Observation;
 	qb:dataSet ex:ds;
-	ex:DimKabupaten ex:Kab_Surabaya;
-	ex:DimDaerahBagian ex:Surabaya_Barat;
-	ex:DimKecamatan ex:Kec_Asemrowo;
-	ex:DimJenisHewan ex:Memamahbiak;
-	ex:DimNamaHewan ex:Kerbau;
+	sdmx-dimension:refArea ex:Kab_Surabaya;
+	sdmx-dimension:refArea ex:Surabaya_Barat;
+	sdmx-dimension:refArea ex:Kec_Asemrowo;
 	sdmx-dimension:sex sdmx-code:sex-M;
 	ex:qtyHewan 0.
