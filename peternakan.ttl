@@ -222,6 +222,7 @@ ex:Kerbau a skos:Concept;
     skos:inScheme ex:CodeListNamaHewan.
 
 # -- Observations -----------------------------------------
+ex:peternakan a rdfs:Class.
 
 ex:data1 a ex:peternakan, qb:Observation;
     qb:dataSet ex:ds;
